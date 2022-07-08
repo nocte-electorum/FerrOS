@@ -64,7 +64,7 @@ impl Writer {
 }
 
 
-struct VGABuffer {
+pub struct VGABuffer {
 	writer: Writer,
 	color: Color
 }
@@ -99,3 +99,6 @@ impl VGABuffer {
 		self.write_bytes(to_write.as_bytes(), color_override);
 	}
 }
+
+
+pub static mut BUFFER: VGABuffer = VGABuffer::new(Color::White);
