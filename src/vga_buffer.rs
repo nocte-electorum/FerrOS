@@ -22,3 +22,17 @@ pub enum Color {
 
 const MAX_HEIGHT: i32 = 25;
 const MAX_WIDTH: i32 = 80;
+
+pub struct Writer {
+	column: i32,
+	row: i32
+}
+
+impl Writer {
+	pub fn new() -> Self {
+		Self {
+			column: 1,
+			row: 1
+		}
+	}
+}
