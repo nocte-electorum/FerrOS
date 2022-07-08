@@ -28,7 +28,10 @@ pub struct Writer {
 	row: i32
 }
 
+// Constants
 impl Writer {
+	const ADDR: *mut u8 = 0xb8000 as *mut u8;
+
 	pub fn new() -> Self {
 		Self {
 			column: 1,
