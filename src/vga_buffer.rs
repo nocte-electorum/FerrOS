@@ -79,3 +79,13 @@ impl VGABuffer {
 		}
 	}
 }
+
+// Methods
+impl VGABuffer {
+	fn write_bytes(&mut self, bytes: &[u8], color_override: Option<Color>) {
+		let color: Color = color_override.unwrap_or(self.color);
+		for byte in bytes {
+			self.writer.write_byte(color, *byte);
+		}
+	}
+}
