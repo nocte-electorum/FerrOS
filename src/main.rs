@@ -17,7 +17,15 @@ pub unsafe extern "C" fn _start() -> ! {
 	// 	*(addr.add(i * 2 + 1)) = Color::Red as u8;
 	// }
 	let mut buffer: VGABuffer = VGABuffer::new(Color::White);
-	buffer.write_str("Hello world 2!", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
+	buffer.write_str("0000000000", None);
 	loop {}
 }
 
