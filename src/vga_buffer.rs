@@ -23,7 +23,7 @@ pub enum Color {
 const MAX_HEIGHT: i32 = 25;
 const MAX_WIDTH: i32 = 80;
 
-pub struct Writer {
+struct Writer {
 	column: i32,
 	row: i32
 }
@@ -32,7 +32,7 @@ pub struct Writer {
 impl Writer {
 	const ADDR: *mut u8 = 0xb8000 as *mut u8;
 
-	pub fn new() -> Self {
+	pub const fn new() -> Self {
 		Self {
 			column: 1,
 			row: 1
@@ -59,6 +59,23 @@ impl Writer {
 			self.row += 1;
 		} else {
 			self.column += 1;
+		}
+	}
+}
+
+
+struct VGABuffer {
+	writer: Writer,
+	color: Color
+}
+
+// Constants
+impl VGABuffer {
+	const fn new(color: Color) -> Self {
+		let writer: Writer = Writer::new();
+		Self {
+			writer,
+			color
 		}
 	}
 }
