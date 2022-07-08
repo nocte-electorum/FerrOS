@@ -82,20 +82,20 @@ impl VGABuffer {
 
 // Methods
 impl VGABuffer {
-	fn write_bytes(&mut self, bytes: &[u8], color_override: Option<Color>) {
+	pub fn write_bytes(&mut self, bytes: &[u8], color_override: Option<Color>) {
 		let color: Color = color_override.unwrap_or(self.color);
 		for byte in bytes {
 			self.writer.write_byte(color, *byte);
 		}
 	}
 
-	fn write_char(&mut self, c: char, color_override: Option<Color>) {
+	pub fn write_char(&mut self, c: char, color_override: Option<Color>) {
 		let color: Color = color_override.unwrap_or(self.color);
 		self.writer.write_byte(color, c as u8);
 	}
 
 	/// Convenience function
-	fn write_str(&mut self, to_write: &str, color_override: Option<Color>) {
+	pub fn write_str(&mut self, to_write: &str, color_override: Option<Color>) {
 		self.write_bytes(to_write.as_bytes(), color_override);
 	}
 }
