@@ -3,7 +3,7 @@
 #![no_main]
 
 mod vga_buffer;
-use vga_buffer::{ Color, VGABuffer };
+use vga_buffer::{ Color, BUFFER };
 use core::panic::PanicInfo;
 
 const HELLO: &[u8] = b"Hello World!";
@@ -16,7 +16,7 @@ pub unsafe extern "C" fn _start() -> ! {
 	// 	*(addr.add(i * 2)) = *byte;
 	// 	*(addr.add(i * 2 + 1)) = Color::Red as u8;
 	// }
-	let mut buffer: VGABuffer = VGABuffer::new(Color::White);
+	let mut buffer = BUFFER.lock();
 	buffer.write_str("0000000000", None);
 	buffer.write_str("0000000000", None);
 	buffer.write_str("0000000000", None);
