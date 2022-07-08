@@ -121,8 +121,16 @@ macro_rules! print {
 	($s:literal) => {
 		BUFFER.lock().write_str($s, None);
 	};
-	// ($s:literal, $($args:expr),+) => {
-	// 	BUFFER.lock().write_str(&format!($s, $($args)+), None);	
-	// }
 }
 pub(crate) use print;
+
+macro_rules! println {
+	() => {
+		print!("\n");
+	};
+	($s:literal) => {
+		print!($s);
+		print!('\n');
+	}
+}
+pub(crate) use println;
