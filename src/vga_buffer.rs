@@ -112,10 +112,7 @@ impl VGABuffer {
 }
 
 
-unsafe impl Send for VGABuffer {}
-unsafe impl Sync for VGABuffer {}
 
-
-static BUFFER: Lazy<VGABuffer> = Lazy::new(|| {
-	VGABuffer::new(Color::White)
+pub static BUFFER: Lazy<Mutex<VGABuffer>> = Lazy::new(|| {
+	Mutex::new(VGABuffer::new(Color::White))
 });
