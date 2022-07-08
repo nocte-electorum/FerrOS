@@ -130,7 +130,7 @@ macro_rules! println {
 	};
 	($s:literal) => {
 		print!($s);
-		print!('\n');
+		print!("\n");
 	}
 }
 pub(crate) use println;
