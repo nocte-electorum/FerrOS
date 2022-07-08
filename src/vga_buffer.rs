@@ -18,3 +18,7 @@ pub enum Color {
 	Yellow = 0xe,
 	White = 0xf,
 }
+
+
+const MAX_HEIGHT: i32 = 25;
+const MAX_WIDTH: i32 = 80;
