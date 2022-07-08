@@ -18,3 +18,87 @@ pub enum Color {
 	Yellow = 0xe,
 	White = 0xf,
 }
+
+
+const MAX_HEIGHT: i32 = 25;
+const MAX_WIDTH: i32 = 80;
+
+struct Writer {
+	column: i32,
+	row: i32
+}
+
+// Constants
+impl Writer {
+	const ADDR: *mut u8 = 0xb8000 as *mut u8;
+
+	pub const fn new() -> Self {
+		Self {
+			column: 1,
+			row: 1
+		}
+	}
+}
+
+// Methods
+impl Writer {
+	pub fn write_byte(&mut self, color: Color, byte: u8) {
+		if self.row > MAX_HEIGHT && self.column > MAX_WIDTH {
+			return;
+		}
+
+		let offset: i32 = (self.row - 1) * 80 + (self.column - 1);
+
+		unsafe {
+			*(Self::ADDR.add(offset as usize * 2_usize)) = byte;
+			*(Self::ADDR.add(offset as usize * 2_usize + 1)) = color as u8;
+		}
+
+		if self.column > MAX_WIDTH {
+			self.column = 1;
+			self.row += 1;
+		} else {
+			self.column += 1;
+		}
+	}
+}
+
+
+pub struct VGABuffer {
+	writer: Writer,
+	color: Color
+}
+
+// Constants
+impl VGABuffer {
+	pub const fn new(color: Color) -> Self {
+		let writer: Writer = Writer::new();
+		Self {
+			writer,
+			color
+		}
+	}
+}
+
+// Methods
+impl VGABuffer {
+	pub fn write_bytes(&mut self, bytes: &[u8], color_override: Option<Color>) {
+		let color: Color = color_override.unwrap_or(self.color);
+		for byte in bytes {
+			self.writer.write_byte(color, *byte);
+		}
+	}
+
+	pub fn write_char(&mut self, c: char, color_override: Option<Color>) {
+		let color: Color = color_override.unwrap_or(self.color);
+		self.writer.write_byte(color, c as u8);
+	}
+
+	/// Convenience function
+	pub fn write_str(&mut self, to_write: &str, color_override: Option<Color>) {
+		self.write_bytes(to_write.as_bytes(), color_override);
+	}
+}
+
+
+pub static mut BUFFER: VGABuffer = VGABuffer::new(Color::White);
