@@ -1,3 +1,5 @@
+use spin::{ Mutex, Lazy };
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Color {
@@ -43,23 +45,32 @@ impl Writer {
 // Methods
 impl Writer {
 	pub fn write_byte(&mut self, color: Color, byte: u8) {
-		if self.row > MAX_HEIGHT && self.column > MAX_WIDTH {
-			return;
-		}
-
-		let offset: i32 = (self.row - 1) * 80 + (self.column - 1);
-
-		unsafe {
-			*(Self::ADDR.add(offset as usize * 2_usize)) = byte;
-			*(Self::ADDR.add(offset as usize * 2_usize + 1)) = color as u8;
-		}
-
-		if self.column > MAX_WIDTH {
-			self.column = 1;
-			self.row += 1;
+		if byte == b'\n' {
+			self.new_line();
 		} else {
-			self.column += 1;
+			if self.row > MAX_HEIGHT && self.column > MAX_WIDTH {
+				return;
+			}
+
+			let offset: i32 = (self.row - 1) * 80 + (self.column - 1);
+
+			unsafe {
+				*(Self::ADDR.add(offset as usize * 2_usize)) = byte;
+				*(Self::ADDR.add(offset as usize * 2_usize + 1)) = color as u8;
+			}
+
+			if self.column > MAX_WIDTH {
+				self.column = 1;
+				self.row += 1;
+			} else {
+				self.column += 1;
+			}
 		}
+	}
+
+	pub fn new_line(&mut self) {
+		self.row += 1;
+		self.column = 1;
 	}
 }
 
@@ -101,4 +112,10 @@ impl VGABuffer {
 }
 
 
-pub static mut BUFFER: VGABuffer = VGABuffer::new(Color::White);
+unsafe impl Send for VGABuffer {}
+unsafe impl Sync for VGABuffer {}
+
+
+static BUFFER: Lazy<VGABuffer> = Lazy::new(|| {
+	VGABuffer::new(Color::White)
+});
