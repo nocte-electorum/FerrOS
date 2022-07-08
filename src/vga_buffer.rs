@@ -116,3 +116,13 @@ impl VGABuffer {
 pub static BUFFER: Lazy<Mutex<VGABuffer>> = Lazy::new(|| {
 	Mutex::new(VGABuffer::new(Color::White))
 });
+
+macro_rules! print {
+	($s:literal) => {
+		BUFFER.lock().write_str($s, None);
+	};
+	// ($s:literal, $($args:expr),+) => {
+	// 	BUFFER.lock().write_str(&format!($s, $($args)+), None);	
+	// }
+}
+pub(crate) use print;
