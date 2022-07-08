@@ -71,7 +71,7 @@ pub struct VGABuffer {
 
 // Constants
 impl VGABuffer {
-	const fn new(color: Color) -> Self {
+	pub const fn new(color: Color) -> Self {
 		let writer: Writer = Writer::new();
 		Self {
 			writer,
